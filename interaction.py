@@ -32,14 +32,30 @@ def getItems():
         items += [item.text]
     return items
     
+def getAmmo():
+    global driver
+    ammodisplay = driver.find_element_by_id("ui-ammo-interactive")
+    ammolist = ammodisplay.find_elements_by_css_selector("*")
+    ammo = {}
+    for obj in ammolist:
+        if obj.get_attribute("id") == "":
+            continue
+        oid = str(obj.get_attribute("id").split("-")[2])
+        data = obj.find_element_by_class_name("ui-loot-count").text
+        ammo.update({oid:str(data)})
+    
+    return ammo
+    
 joinGame("bot")
 time.sleep(10)
 health = gethealth()
 items = getItems()
+ammo = getAmmo() 
 
 while True:
     newhealth = gethealth()
     newitems = getItems()
+    newammo = getAmmo()
     
     if newhealth != health:
         print("Health: " + str(health) + " -> " + str(newhealth))
@@ -51,3 +67,9 @@ while True:
                 print("Item #" + str(index + 1) + " " + str(items[index]) + " -> " + str(newitems[index]))
                 
         items = newitems
+        
+    if newammo != ammo:
+        for key in ammo.keys():
+            if ammo[key] != newammo[key]:
+                print(str(key) + " : " + str(ammo[key]) + " -> " + str(newammo[key]))
+        ammo = newammo
