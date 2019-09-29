@@ -38,7 +38,17 @@ class connection:
         #clicks join game
         join_solo.click()
 
+    def get_health():
+        None
 
+    def get_weapons():
+        None
+
+    def get_ammo():
+        None
+
+    def get_healing():
+        None
 
 
 if __name__ == '__main__':
