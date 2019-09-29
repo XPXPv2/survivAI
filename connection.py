@@ -1,19 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys as keys
-
+import time
 
 class connection:
 
     def helper_load_config(self,name):
         #loads file and returns a list but if the file soe not exist it returns None
         try:
-
             fp = open(name,'r')
             rd = fp.read()
             d = rd.split("\n")[:-1]
             return d
-
-         except:
+        except:
             return None
 
     def __init__(self):
@@ -29,7 +27,7 @@ class connection:
             if config == None:
                 self.driver = webdriver.Firefox()
             else:
-                profile = webdriver.FirefoxProfile(config)
+                profile = webdriver.FirefoxProfile(config[0])
                 self.driver = webdriver.Firefox(profile)
 
     def load_page(self):
@@ -59,7 +57,7 @@ class connection:
         #gets health of player
 
         health_bar = self.driver.find_element_by_id("ui-health-actual")
-        health_str = get_property('attributes')['2']['value'].split(';')[1].split(":")[1]
+        health_str = health_bar.get_property('attributes')['2']['value'].split(';')[1].split(":")[1]
         health_float = float(health_str[:-1])
         return health_float
 
@@ -78,5 +76,6 @@ if __name__ == '__main__':
     a.set_driver()
     a.load_page()
     a.login("bot")
-    while true:
+    time.sleep(5)
+    while True:
         print(a.get_health())
