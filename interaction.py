@@ -1,3 +1,4 @@
+#Note this is a test script and will be rewritten into a class to handle fetching info from the server
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys as keys
 import time
