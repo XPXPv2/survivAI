@@ -46,6 +46,9 @@ def getAmmo():
         ammo.update({oid:str(data)})
     
     return ammo
+
+def getArmor():
+    global driver
     
 joinGame("bot")
 time.sleep(10)

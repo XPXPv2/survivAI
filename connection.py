@@ -14,13 +14,15 @@ class connection:
         except:
             return None
 
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}):
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail =  {'pass':False}):
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
         self.FAILED_TOOLS = tool_fail
         self.FAILED_AMMO = ammo_fail
-        self.DEFALT_AMMO = {'pass':True}
+        self.DEFAULT_AMMO = {'pass':True}
+        self.FAILED_HEALING = heal_fail
+        self.DEFAULT_HEALING = {'pass':True}
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver        
@@ -84,8 +86,9 @@ class connection:
     def __get_ammo(self):
         #gets ammo listing
 
-        ammoList = self.driver.find_element_by_id("ui-ammo-interactive").find_elements_by_css_selector("*")
-        ammoDic = self.DEFALT_AMMO
+        ammoList = self.driver.find_element_by_id("ui-ammo-interactive")
+        ammoList = ammoList.find_elements_by_css_selector("*")
+        ammoDic = self.DEFAULT_AMMO
 
         for ammo in ammoList:
             if ammo.get_attribute("id") == "":
@@ -100,7 +103,22 @@ class connection:
 
 
     def __get_healing(self):
-        None
+        #gets medic listing
+
+        medicList = self.driver.find_element_by_id("ui-medical-interactive")
+        medicList = medicList.find_elements_by_css_selector("*")
+        medicDic = self.DEFAULT_HEALING
+
+        for medic in medicList:
+            if medic.get_attribute("id") == "":
+                continue
+
+            medicName = str(medic.get_attribute("id").split("-")[2])
+            medicData = str(medic.find_element_by_class_name("ui-loot-count").text)
+
+            medicDic.update({medicName:medicData})
+
+        return medicDic
 
     def get_health(self):
         try:
@@ -120,15 +138,22 @@ class connection:
         except:
             return self.FAILED_AMMO
 
+    def get_healing(self):
+        try:
+            return self.__get_healing()
+        except:
+            return self.FAILED_HEALING
+
 if __name__ == '__main__':
     a = connection()
+    a.FAILED_HEALTH = 100.0
     a.set_driver()
     a.load_page()
     a.login("bot")
-    time.sleep(20)
     data = None
-    while True:
-        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo()}
+    run = True
+    while run:
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing()}
         if ndata != data:
             data = ndata
             print(data)
@@ -137,6 +162,5 @@ if __name__ == '__main__':
             if input("contine?[y/n]:") == "y":
                 continue
             a.close()
-
-
-
+            run = False
+            
