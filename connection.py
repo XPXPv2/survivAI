@@ -30,6 +30,10 @@ class connection:
                 profile = webdriver.FirefoxProfile(config[0])
                 self.driver = webdriver.Firefox(profile)
 
+
+    def close(self):
+        self.driver.close()
+
     def load_page(self):
         #opens webpage
 
@@ -100,6 +104,18 @@ if __name__ == '__main__':
     a.set_driver()
     a.load_page()
     a.login("bot")
-    time.sleep(5)
+    time.sleep(20)
+    data = None
     while True:
-        print(a.get_health())
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo()}
+        if ndata != data:
+            data = ndata
+            print(data)
+
+        if data["health"] = 0.0:
+            if input("contine?[y/n]:") == "y":
+                continue
+            a.close()
+
+
+
