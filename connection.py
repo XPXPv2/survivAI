@@ -61,8 +61,17 @@ class connection:
         health_float = float(health_str[:-1])
         return health_float
 
-    def get_weapons(self):
-        None
+    def get_tools(self):
+        #gets equipt tools
+        
+        tools = self.driver.find_elements_by_class_name("ui-weapon-name")
+        
+        toolList = []
+
+        for tool in tools:
+            toolList += [tool.text]
+
+        return toolList
 
     def get_ammo(self):
         None
