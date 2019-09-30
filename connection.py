@@ -74,7 +74,22 @@ class connection:
         return toolList
 
     def get_ammo(self):
-        None
+        #gets ammo listing
+
+        ammoList = self.driver.find_element_by_id("ui-ammo-interactive").find_elements_by_css_selector("*")
+        ammoDic = {}
+
+        for ammo in ammoList:
+            if ammo.get_attribute("id") == "":
+                continue
+
+            ammoName = str(ammo.get_attribute("id").split("-")[2])
+            ammoData = str(ammo.find_element_by_class_name("ui-loot-count").text)
+
+            ammoDic.update({ammoName:ammoData})
+
+        return ammoDic
+
 
     def get_healing(self):
         None
