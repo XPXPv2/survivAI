@@ -4,7 +4,7 @@ import time
 
 class connection:
 
-    def helper_load_config(self,name):
+    def __helper_load_config(self,name):
         #loads file and returns a list but if the file soe not exist it returns None
         try:
             fp = open(name,'r')
@@ -27,7 +27,7 @@ class connection:
 
         #firefox
         if driver == 'firefox':
-            config = self.helper_load_config("firefox_profile")
+            config = self.__helper_load_config("firefox_profile")
             if config == None:
                 self.driver = webdriver.Firefox()
             else:
