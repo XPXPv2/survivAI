@@ -14,9 +14,13 @@ class connection:
         except:
             return None
 
-    def __init__(self):
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}):
         #define varables
         self.driver = None
+        self.FAILED_HEALTH = health_fail
+        self.FAILED_TOOLS = tool_fail
+        self.FAILED_AMMO = ammo_fail
+        self.DEFALT_AMMO = {'pass':True}
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver        
@@ -57,7 +61,7 @@ class connection:
         #clicks join game
         join_solo.click()
 
-    def get_health(self):
+    def __get_health(self):
         #gets health of player
 
         health_bar = self.driver.find_element_by_id("ui-health-actual")
@@ -65,7 +69,7 @@ class connection:
         health_float = float(health_str[:-1])
         return health_float
 
-    def get_tools(self):
+    def __get_tools(self):
         #gets equipt tools
         
         tools = self.driver.find_elements_by_class_name("ui-weapon-name")
@@ -77,11 +81,11 @@ class connection:
 
         return toolList
 
-    def get_ammo(self):
+    def __get_ammo(self):
         #gets ammo listing
 
         ammoList = self.driver.find_element_by_id("ui-ammo-interactive").find_elements_by_css_selector("*")
-        ammoDic = {}
+        ammoDic = self.DEFALT_AMMO
 
         for ammo in ammoList:
             if ammo.get_attribute("id") == "":
@@ -95,9 +99,26 @@ class connection:
         return ammoDic
 
 
-    def get_healing(self):
+    def __get_healing(self):
         None
 
+    def get_health(self):
+        try:
+            return self.__get_health()
+        except:
+            return self.FAILED_HEALTH
+
+    def get_tools(self):
+        try:
+            return self.__get_tools()
+        except:
+            return self.FAILED_TOOLS
+
+    def get_ammo(self):
+        try:
+            return self.__get_ammo()
+        except:
+            return self.FAILED_AMMO
 
 if __name__ == '__main__':
     a = connection()
@@ -112,7 +133,7 @@ if __name__ == '__main__':
             data = ndata
             print(data)
 
-        if data["health"] = 0.0:
+        if data["health"] == 0.0:
             if input("contine?[y/n]:") == "y":
                 continue
             a.close()
