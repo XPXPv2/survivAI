@@ -25,7 +25,7 @@ class connection:
         self.DEFAULT_HEALING = {'pass':True}
 
     def set_driver(self,driver = 'firefox'):
-        #loads the driver        
+        #loads the driver
 
         #firefox
         if driver == 'firefox':
@@ -35,6 +35,18 @@ class connection:
             else:
                 profile = webdriver.FirefoxProfile(config[0])
                 self.driver = webdriver.Firefox(profile)
+
+        if driver == 'chrome':
+            config = self.__helper_load_config("chrome_profile")
+            if config == None:
+                self.driver = webdriver.Chrome()
+            else:
+                options = webdriver.ChromeOptions()
+                directory = 'user-data-dir=' + config[0]
+                profile = 'profile-directory=' + config[1]
+                options.add_argument(directory)
+                options.add_argument(profile)
+                self.driver = webdriver.Chrome(options=options)
 
 
     def close(self):
@@ -47,7 +59,7 @@ class connection:
 
     def login(self,name):
         #logs in/joins the game
-        
+
         #finds the join buttons
         join_solo = self.driver.find_element_by_id("btn-start-mode-0")
 
@@ -73,9 +85,9 @@ class connection:
 
     def __get_tools(self):
         #gets equipt tools
-        
+
         tools = self.driver.find_elements_by_class_name("ui-weapon-name")
-        
+
         toolList = []
 
         for tool in tools:
@@ -147,7 +159,7 @@ class connection:
 if __name__ == '__main__':
     a = connection()
     a.FAILED_HEALTH = 100.0
-    a.set_driver()
+    a.set_driver(driver='chrome')
     a.load_page()
     a.login("bot")
     data = None
@@ -163,4 +175,3 @@ if __name__ == '__main__':
                 continue
             a.close()
             run = False
-            
