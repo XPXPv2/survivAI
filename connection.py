@@ -159,7 +159,7 @@ class connection:
 if __name__ == '__main__':
     a = connection()
     a.FAILED_HEALTH = 100.0
-    a.set_driver(driver='chrome')
+    a.set_driver(driver='firefox')
     a.load_page()
     a.login("bot")
     data = None
