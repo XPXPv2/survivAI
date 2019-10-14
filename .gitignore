@@ -103,5 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-#log 
+#log
 *.log
+
+#profiles
+firefox_profile
+chrome_profile
