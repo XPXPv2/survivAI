@@ -184,7 +184,6 @@ if __name__ == '__main__':
     a.login("bot")
     data = None
     run = True
-    time.sleep(20)
     while run:
         ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour()}
         if ndata != data:
