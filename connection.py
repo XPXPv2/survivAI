@@ -14,7 +14,7 @@ class connection:
         except:
             return None
 
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail =  {'pass':False}):
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}):
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
@@ -23,6 +23,7 @@ class connection:
         self.DEFAULT_AMMO = {'pass':True}
         self.FAILED_HEALING = heal_fail
         self.DEFAULT_HEALING = {'pass':True}
+        self.FAILED_ARMOUR = armour_fail
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver
@@ -120,16 +121,18 @@ class connection:
 
         return medicDic
 
-    def get_armour(self):
+    def __get_armour(self):
+        equipedArmor = {'pass':True}
         equipment = self.driver.find_elements_by_class_name('ui-armor-counter')
         for equiped in equipment:
             Eid = equiped.get_attribute("id")
             subElement = equiped.find_elements_by_class_name("ui-armor-level")
             if len(subElement) < 1:
                 continue
-            print(Eid)
-            print(str(subElement[0].text))
+            name = Eid.split("-")[2]
+            equipedArmor.update({name:str(subElement[0].text)})
 
+        return equipedArmor
 
     def get_health(self):
         try:
@@ -155,6 +158,12 @@ class connection:
         except:
             return self.FAILED_HEALING
 
+    def get_armour(self):
+        try:
+            return self.__get_armour()
+        except:
+            return self.FAILED_ARMOUR
+
 if __name__ == '__main__':
     a = connection()
     a.FAILED_HEALTH = 100.0
@@ -165,8 +174,7 @@ if __name__ == '__main__':
     run = True
     time.sleep(20)
     while run:
-        a.get_armour()
-        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing()}
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour()}
         if ndata != data:
             data = ndata
             print(data)
