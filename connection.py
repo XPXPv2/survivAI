@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys as keys
 import time
+import PIL.Image, io, base64
 
 class connection:
 
@@ -30,19 +31,25 @@ class connection:
 
         #firefox
         if driver == 'firefox':
+            options = webdriver.FirefoxOptions()
+            #disables webgl to allow grabing of the screen
+            options.set_preference("webgl.disabled",True)
             config = self.__helper_load_config("firefox_profile")
             if config == None:
-                self.driver = webdriver.Firefox()
+                self.driver = webdriver.Firefox(options=options)
             else:
                 profile = webdriver.FirefoxProfile(config[0])
-                self.driver = webdriver.Firefox(profile)
+                self.driver = webdriver.Firefox(firefox_profile=profile, options=options)
 
         if driver == 'chrome':
             config = self.__helper_load_config("chrome_profile")
+            options = webdriver.ChromeOptions()
+            #disables webgl to allow grabing of the screen
+            options.add_argument("--disable-webgl ")
+
             if config == None:
-                self.driver = webdriver.Chrome()
+                self.driver = webdriver.Chrome(options=options)
             else:
-                options = webdriver.ChromeOptions()
                 directory = 'user-data-dir=' + config[0]
                 profile = 'profile-directory=' + config[1]
                 options.add_argument(directory)
@@ -146,6 +153,23 @@ class connection:
 
         return equipedArmor
 
+    def __get_image_canvas(self):
+        #for this to word webgl has to be disabled
+
+        #retrives canvas
+        canvas = self.driver.find_element_by_id("cvs")
+    
+        #retrives base64 text of image
+        base64Text = a.driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);", canvas)
+
+        #decodes and sets up bytes object
+        png_RB = base64.b64decode(base64Text)
+        FP = io.BytesIO(png_RB)
+
+        #reads and returns image object
+        image = PIL.Image.open(FP)
+        return image
+
     def get_health(self):
         try:
             return self.__get_health()
@@ -176,6 +200,10 @@ class connection:
         except:
             return self.FAILED_ARMOUR
 
+    def get_image(self):
+        #TODO add later webgl image grabing
+        return self.__get_image_canvas()
+
 if __name__ == '__main__':
     a = connection()
     a.FAILED_HEALTH = 100.0
@@ -184,13 +212,14 @@ if __name__ == '__main__':
     a.login("bot")
     data = None
     run = True
+    a.get_image().show()
     while run:
         ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour()}
         if ndata != data:
             data = ndata
             print(data)
 
-        if data["health"] == 0.0:
+        if data["health"] <= 0.0:
             if input("contine?[y/n]:") == "y":
                 continue
             a.close()
