@@ -154,7 +154,7 @@ class connection:
         return equipedArmor
 
     def __get_image_canvas(self):
-        #for this to word webgl has to be disabled
+        #for this to work webgl has to be disabled
 
         #retrives canvas
         canvas = self.driver.find_element_by_id("cvs")
