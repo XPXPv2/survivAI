@@ -158,7 +158,7 @@ class connection:
 
         #retrives canvas
         canvas = self.driver.find_element_by_id("cvs")
-    
+
         #retrives base64 text of image
         base64Text = a.driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);", canvas)
 
@@ -222,5 +222,6 @@ if __name__ == '__main__':
         if data["health"] <= 0.0:
             if input("contine?[y/n]:") == "y":
                 continue
+            a.get_image().show()
             a.close()
             run = False
