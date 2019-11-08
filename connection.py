@@ -16,7 +16,7 @@ class connection:
         except:
             return None
 
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}):
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, time_fail = 0):
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
@@ -26,6 +26,7 @@ class connection:
         self.FAILED_HEALING = heal_fail
         self.DEFAULT_HEALING = {'pass':True}
         self.FAILED_ARMOUR = armour_fail
+        self.FAILED_RED_TIME = time_fail
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver
@@ -161,7 +162,7 @@ class connection:
         canvas = self.driver.find_element_by_id("cvs")
 
         #retrives base64 text of image
-        base64Text = a.driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);", canvas)
+        base64Text = self.driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);", canvas)
 
         #decodes and sets up bytes object
         png_RB = base64.b64decode(base64Text)
@@ -170,6 +171,23 @@ class connection:
         #reads and returns image object
         image = PIL.Image.open(FP)
         return image
+
+    def __get_red_time(self):
+
+        #gets element
+        timeEle = self.driver.find_element_by_id("ui-gas-timer")
+
+        stringValue = timeEle.text
+
+        #convert string
+        min, sec = stringValue.split(":")
+
+        min = int(min)
+        sec = int(sec)
+
+        totalSec = (min * 60) + sec
+
+        return totalSec
 
     def get_health(self):
         try:
@@ -201,6 +219,12 @@ class connection:
         except:
             return self.FAILED_ARMOUR
 
+    def get_red_time(self):
+        try:
+            return self.__get_red_time()
+        except:
+            return self.FAILED_RED_TIME
+
     def get_image(self):
         #TODO add later webgl image grabing
         return self.__get_image_canvas()
@@ -224,5 +248,6 @@ if __name__ == '__main__':
             if input("contine?[y/n]:") == "y":
                 continue
             a.get_image().show()
+            print(a.get_red_time())
             a.close()
             run = False
