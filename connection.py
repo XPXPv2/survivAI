@@ -16,7 +16,7 @@ class connection:
         except:
             return None
 
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, time_fail = 0):
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, time_fail = 0, player_fail = 0):
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
@@ -27,6 +27,7 @@ class connection:
         self.DEFAULT_HEALING = {'pass':True}
         self.FAILED_ARMOUR = armour_fail
         self.FAILED_RED_TIME = time_fail
+        self.FAILED_PLAYER_NUM = player_fail
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver
@@ -185,9 +186,22 @@ class connection:
         min = int(min)
         sec = int(sec)
 
+        #convert min to seconds and add them
         totalSec = (min * 60) + sec
 
         return totalSec
+
+    def __get_players_left(self):
+
+        #gets element
+
+        counterEle = self.driver.find_element_by_id("ui-map-counter-default")
+
+        stringValue = counterEle.text
+
+        intVal = int(stringValue)
+
+        return intVal
 
     def get_health(self):
         try:
@@ -225,6 +239,12 @@ class connection:
         except:
             return self.FAILED_RED_TIME
 
+    def get_players_left(self):
+        try:
+            return self.__get_players_left()
+        except:
+            return self.FAILED_PLAYER_NUM
+
     def get_image(self):
         #TODO add later webgl image grabing
         return self.__get_image_canvas()
@@ -237,9 +257,10 @@ if __name__ == '__main__':
     a.login("bot")
     data = None
     run = True
+    time.sleep(10)
     a.get_image().show()
     while run:
-        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour()}
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'players':a.get_players_left()}
         if ndata != data:
             data = ndata
             print(data)
