@@ -5,7 +5,8 @@ import PIL.Image, io, base64
 
 class connection:
 
-    #TODO replace with CSD file for all config insted of seperate files to make more orginized
+    #TODO add a logging system
+    #TODO replace with CSD/json file for all config insted of seperate files to make more orginized
     def __helper_load_config(self,name):
         #loads file and returns a list but if the file dose not exist it returns None
         try:
