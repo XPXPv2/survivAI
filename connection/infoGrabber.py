@@ -3,12 +3,9 @@ from selenium.webdriver.common.keys import Keys as keys
 import time
 import PIL.Image, io, base64
 
-class connection:
-  
-    #TODO rename class and create a class to manage this class and the futer class to interacte with the game
-    #TODO add a logging system
-    #TODO replace with CSD/json file for all config insted of seperate files to make more orginized
-    
+class infoGrabber:
+
+
     def __helper_load_config(self,name):
         #loads file and returns a list but if the file dose not exist it returns None
         try:
@@ -287,7 +284,7 @@ class connection:
         return self.__get_image_canvas()
 
 if __name__ == '__main__':
-    a = connection()
+    a = infoGrabber()
     a.FAILED_HEALTH = 100.0
     a.set_driver(driver='firefox')
     a.load_page()
