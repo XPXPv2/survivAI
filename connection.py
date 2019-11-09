@@ -16,7 +16,11 @@ class connection:
         except:
             return None
 
+<<<<<<< Updated upstream
     def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, time_fail = 0, player_fail = 0):
+=======
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}):
+>>>>>>> Stashed changes
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
@@ -26,8 +30,12 @@ class connection:
         self.FAILED_HEALING = heal_fail
         self.DEFAULT_HEALING = {'pass':True}
         self.FAILED_ARMOUR = armour_fail
+<<<<<<< Updated upstream
         self.FAILED_RED_TIME = time_fail
         self.FAILED_PLAYER_NUM = player_fail
+=======
+        self.FAILED_ZOOM = zoom_fail
+>>>>>>> Stashed changes
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver
@@ -156,6 +164,30 @@ class connection:
 
         return equipedArmor
 
+    def __get_zoom(self):
+
+        #get parent Element
+        parent = self.driver.find_element_by_id("ui-top-center-scopes")
+
+        #gets nessary groups of elements
+        inactiveZoom = parent.find_elements_by_class_name("ui-zoom-inactive")
+        activeZoom = parent.find_element_by_class_name("ui-zoom-active")
+
+        #retreves and parses the current active zoom level
+        zoomLevel = activeZoom.get_property("id").split('-')[2]
+        avalableZoom = []
+
+        #iterates over all zoom levels and removes levels not avalabe and parses the name
+        for zoom in inactiveZoom:
+            if not("ui-hidden" in zoom.get_attribute("class")):
+                avalableZoom += [zoom.get_property("id").split('-')[2]]
+
+        #add active zoom to avalable zooms
+        avalableZoom += [zoomLevel]
+
+        #returns dictionary of zooms
+        return {'active':zoomLevel,'avalable':avalableZoom}
+
     def __get_image_canvas(self):
         #for this to work webgl has to be disabled
 
@@ -233,6 +265,7 @@ class connection:
         except:
             return self.FAILED_ARMOUR
 
+<<<<<<< Updated upstream
     def get_red_time(self):
         try:
             return self.__get_red_time()
@@ -244,6 +277,13 @@ class connection:
             return self.__get_players_left()
         except:
             return self.FAILED_PLAYER_NUM
+=======
+    def get_zoom(self):
+        try:
+            return self.__get_zoom()
+        except:
+            return self.FAILED_ZOOM
+>>>>>>> Stashed changes
 
     def get_image(self):
         #TODO add later webgl image grabing
@@ -259,8 +299,13 @@ if __name__ == '__main__':
     run = True
     time.sleep(10)
     a.get_image().show()
+    time.sleep(10)
     while run:
+<<<<<<< Updated upstream
         ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'players':a.get_players_left()}
+=======
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'zoom':a.get_zoom()}
+>>>>>>> Stashed changes
         if ndata != data:
             data = ndata
             print(data)
