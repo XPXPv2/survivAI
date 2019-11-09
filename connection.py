@@ -4,9 +4,11 @@ import time
 import PIL.Image, io, base64
 
 class connection:
-
+  
+    #TODO rename class and create a class to manage this class and the futer class to interacte with the game
     #TODO add a logging system
     #TODO replace with CSD/json file for all config insted of seperate files to make more orginized
+    
     def __helper_load_config(self,name):
         #loads file and returns a list but if the file dose not exist it returns None
         try:
@@ -17,7 +19,10 @@ class connection:
         except:
             return None
 
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}):
+
+
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}, time_fail = 0, player_fail = 0):
+
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
@@ -27,6 +32,9 @@ class connection:
         self.FAILED_HEALING = heal_fail
         self.DEFAULT_HEALING = {'pass':True}
         self.FAILED_ARMOUR = armour_fail
+        self.FAILED_RED_TIME = time_fail
+        self.FAILED_PLAYER_NUM = player_fail
+        self.FAILED_ZOOM = zoom_fail
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver
@@ -155,6 +163,30 @@ class connection:
 
         return equipedArmor
 
+    def __get_zoom(self):
+
+        #get parent Element
+        parent = self.driver.find_element_by_id("ui-top-center-scopes")
+
+        #gets nessary groups of elements
+        inactiveZoom = parent.find_elements_by_class_name("ui-zoom-inactive")
+        activeZoom = parent.find_element_by_class_name("ui-zoom-active")
+
+        #retreves and parses the current active zoom level
+        zoomLevel = activeZoom.get_property("id").split('-')[2]
+        avalableZoom = []
+
+        #iterates over all zoom levels and removes levels not avalabe and parses the name
+        for zoom in inactiveZoom:
+            if not("ui-hidden" in zoom.get_attribute("class")):
+                avalableZoom += [zoom.get_property("id").split('-')[2]]
+
+        #add active zoom to avalable zooms
+        avalableZoom += [zoomLevel]
+
+        #returns dictionary of zooms
+        return {'active':zoomLevel,'avalable':avalableZoom}
+
     def __get_image_canvas(self):
         #for this to work webgl has to be disabled
 
@@ -162,7 +194,7 @@ class connection:
         canvas = self.driver.find_element_by_id("cvs")
 
         #retrives base64 text of image
-        base64Text = a.driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);", canvas)
+        base64Text = self.driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);", canvas)
 
         #decodes and sets up bytes object
         png_RB = base64.b64decode(base64Text)
@@ -171,6 +203,36 @@ class connection:
         #reads and returns image object
         image = PIL.Image.open(FP)
         return image
+
+    def __get_red_time(self):
+
+        #gets element
+        timeEle = self.driver.find_element_by_id("ui-gas-timer")
+
+        stringValue = timeEle.text
+
+        #convert string
+        min, sec = stringValue.split(":")
+
+        min = int(min)
+        sec = int(sec)
+
+        #convert min to seconds and add them
+        totalSec = (min * 60) + sec
+
+        return totalSec
+
+    def __get_players_left(self):
+
+        #gets element
+
+        counterEle = self.driver.find_element_by_id("ui-map-counter-default")
+
+        stringValue = counterEle.text
+
+        intVal = int(stringValue)
+
+        return intVal
 
     def get_health(self):
         try:
@@ -202,6 +264,24 @@ class connection:
         except:
             return self.FAILED_ARMOUR
 
+    def get_red_time(self):
+        try:
+            return self.__get_red_time()
+        except:
+            return self.FAILED_RED_TIME
+
+    def get_players_left(self):
+        try:
+            return self.__get_players_left()
+        except:
+            return self.FAILED_PLAYER_NUM
+
+    def get_zoom(self):
+        try:
+            return self.__get_zoom()
+        except:
+            return self.FAILED_ZOOM
+
     def get_image(self):
         #TODO add later webgl image grabing
         return self.__get_image_canvas()
@@ -214,9 +294,11 @@ if __name__ == '__main__':
     a.login("bot")
     data = None
     run = True
+    time.sleep(10)
     a.get_image().show()
+    time.sleep(10)
     while run:
-        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour()}
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'players':a.get_players_left(),'zoom':a.get_zoom()}
         if ndata != data:
             data = ndata
             print(data)
@@ -225,5 +307,6 @@ if __name__ == '__main__':
             if input("contine?[y/n]:") == "y":
                 continue
             a.get_image().show()
+            print(a.get_red_time())
             a.close()
             run = False
