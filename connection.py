@@ -5,6 +5,7 @@ import PIL.Image, io, base64
 
 class connection:
 
+    #TODO rename class and create a class to manage this class and the futer class to interacte with the game
     #TODO replace with CSD file for all config insted of seperate files to make more orginized
     def __helper_load_config(self,name):
         #loads file and returns a list but if the file dose not exist it returns None
@@ -16,11 +17,10 @@ class connection:
         except:
             return None
 
-<<<<<<< Updated upstream
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, time_fail = 0, player_fail = 0):
-=======
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}):
->>>>>>> Stashed changes
+
+
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}, time_fail = 0, player_fail = 0):
+
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
@@ -30,12 +30,9 @@ class connection:
         self.FAILED_HEALING = heal_fail
         self.DEFAULT_HEALING = {'pass':True}
         self.FAILED_ARMOUR = armour_fail
-<<<<<<< Updated upstream
         self.FAILED_RED_TIME = time_fail
         self.FAILED_PLAYER_NUM = player_fail
-=======
         self.FAILED_ZOOM = zoom_fail
->>>>>>> Stashed changes
 
     def set_driver(self,driver = 'firefox'):
         #loads the driver
@@ -265,7 +262,6 @@ class connection:
         except:
             return self.FAILED_ARMOUR
 
-<<<<<<< Updated upstream
     def get_red_time(self):
         try:
             return self.__get_red_time()
@@ -277,13 +273,12 @@ class connection:
             return self.__get_players_left()
         except:
             return self.FAILED_PLAYER_NUM
-=======
+
     def get_zoom(self):
         try:
             return self.__get_zoom()
         except:
             return self.FAILED_ZOOM
->>>>>>> Stashed changes
 
     def get_image(self):
         #TODO add later webgl image grabing
@@ -301,11 +296,7 @@ if __name__ == '__main__':
     a.get_image().show()
     time.sleep(10)
     while run:
-<<<<<<< Updated upstream
-        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'players':a.get_players_left()}
-=======
-        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'zoom':a.get_zoom()}
->>>>>>> Stashed changes
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'players':a.get_players_left(),'zoom':a.get_zoom()}
         if ndata != data:
             data = ndata
             print(data)
