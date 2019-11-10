@@ -109,3 +109,6 @@ venv.bak/
 #profiles
 firefox_profile
 chrome_profile
+
+#config
+config
