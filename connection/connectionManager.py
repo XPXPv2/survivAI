@@ -1,6 +1,9 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys as keys
 
-import infoGrabber
-import interacter
+
+import connection.infoGrabber as infoGrabber
+import connection.interacter as interacter
 
 #class to manage the infoGrabber and the futer inteaction class
 #TODO implument the class
@@ -21,14 +24,17 @@ class connectionManager:
 
         self.config = config
 
-        self.grabber = infoGrabber.infoGrabber()
+        self.grab = infoGrabber.infoGrabber()
+        self.do = interacter.interacter()
 
-        self.setConfig(self.grabber)
+        self.setConfig(self.grab)
+        self.setConfig(self.do)
 
-        print(self.grabber.FAILED_HEALTH)
 
-    def initDriver(self,brower = 'firefox'):
+    def initDriver(self,driver = None):
         #loads the driver
+        if driver == None:
+            driver = self.config['driver']
 
         #firefox
         if driver == 'firefox':
@@ -58,4 +64,5 @@ class connectionManager:
                 self.driver = webdriver.Chrome(options=options)
 
     def setSubDriver(self):
-        self.grabber.driver = self.driver
+        self.grab.driver = self.driver
+        self.do.driver = self.driver
