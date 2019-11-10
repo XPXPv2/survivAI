@@ -1,0 +1,10 @@
+{
+  "firefox_profile": {"path": "path_to_firefox_profile"},
+  "chrome_profile": {
+                      "parentDir":"path_to_chrome_profile_folders",
+                      "profileName":"profile_name"
+                    },
+  "driver": "your_choice_of_supported_browser",
+  "grab":"dictionary_of_infoGrabber_config",
+  "do":"dictionary_of_ineracter_config"
+}

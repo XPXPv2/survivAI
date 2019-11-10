@@ -12,13 +12,13 @@ import connection.interacter as interacter
 
 class connectionManager:
 
-    def setConfig(self,obj):
+    def setConfig(self,obj,sub):
 
         attributes = dir(obj)
-        for key in self.config.keys():
+        for key in self.config[sub].keys():
             if not(key in attributes):
                 continue
-            obj.__setattr__(key,self.config[key])
+            obj.__setattr__(key,self.config[sub][key])
 
     def __init__(self,config):
 
@@ -27,8 +27,8 @@ class connectionManager:
         self.grab = infoGrabber.infoGrabber()
         self.do = interacter.interacter()
 
-        self.setConfig(self.grab)
-        self.setConfig(self.do)
+        self.setConfig(self.grab,'grab')
+        self.setConfig(self.do,'do')
 
         self.info = {}
 
@@ -59,8 +59,8 @@ class connectionManager:
             if config == None:
                 self.driver = webdriver.Chrome(options=options)
             else:
-                directory = 'user-data-dir=' + config['homeDir']
-                profile = 'profile-directory=' + config['profileDir']
+                directory = 'user-data-dir=' + config['parentDir']
+                profile = 'profile-directory=' + config['profileName']
                 options.add_argument(directory)
                 options.add_argument(profile)
                 self.driver = webdriver.Chrome(options=options)
