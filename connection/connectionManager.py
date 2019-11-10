@@ -30,6 +30,8 @@ class connectionManager:
         self.setConfig(self.grab)
         self.setConfig(self.do)
 
+        self.info = {}
+
 
     def initDriver(self,driver = None):
         #loads the driver
@@ -66,3 +68,18 @@ class connectionManager:
     def setSubDriver(self):
         self.grab.driver = self.driver
         self.do.driver = self.driver
+
+    def updateInfo(self):
+        self.info = {
+        'stagnant':{'health':self.grab.get_health(),
+            "tools":self.grab.get_tools(),
+            'ammo':self.grab.get_ammo(),
+            'healing':self.grab.get_healing(),
+            'armor':self.grab.get_armour(),
+            'playersAlive':self.grab.get_players_left(),
+            'zoom':self.grab.get_zoom()},
+        'nonstagnant':{
+            'redZone':self.grab.get_red_time(),
+            'image':self.grab.get_image()
+            }
+        }
