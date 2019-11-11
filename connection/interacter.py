@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys as keys
 
-#TODO inplment class to interact with game
 class interacter:
 
     def __init__(self):
@@ -30,3 +29,19 @@ class interacter:
 
         #clicks join game
         join_solo.click()
+
+    def __setTool(self,slot):
+
+        id = "ui-weapon-id-" + str(slot)
+
+        element = self.driver.find_element_by_id(id)
+
+        element.click()
+
+        return 0
+
+    def setTool(self,slot):
+        try:
+            return self.__setTool(slot)
+        except:
+            return -1

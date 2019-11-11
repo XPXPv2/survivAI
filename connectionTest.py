@@ -1,6 +1,7 @@
 
 import connection
 import json
+import time
 
 fp = open("config",'r')
 config = json.load(fp)
@@ -12,5 +13,8 @@ a.initDriver()
 a.setSubDriver()
 a.do.loadPage()
 a.do.login("botter")
+time.sleep(10)
 a.updateInfo()
 print(a.info)
+while(True):
+    pass
