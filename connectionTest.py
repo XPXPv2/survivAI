@@ -17,4 +17,9 @@ time.sleep(10)
 a.updateInfo()
 print(a.info)
 while(True):
+    """
+    #auto healing
+    for item in a.info['stagnant']['healing'].keys():
+        a.do.useHealing(item)
+    """
     pass

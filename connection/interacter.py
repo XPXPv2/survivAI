@@ -40,6 +40,22 @@ class interacter:
 
         return 0
 
+    def __useHealing(self,item):
+
+        id = "ui-loot-" + str(item)
+
+        element = self.driver.find_element_by_id(id)
+
+        element.click()
+
+        return 0
+
+    def useHealing(self,item):
+        try:
+            return self.__useHealing(item)
+        except:
+            return -1
+
     def setTool(self,slot):
         try:
             return self.__setTool(slot)
