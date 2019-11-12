@@ -72,7 +72,7 @@ class connectionManager:
             "tools":self.grab.get_tools(),
             'ammo':self.grab.get_ammo(),
             'healing':self.grab.get_healing(),
-            'armor':self.grab.get_armour(),
+            'armor':self.grab.get_armor(),
             'playersAlive':self.grab.get_players_left(),
             'zoom':self.grab.get_zoom()},
         'nonstagnant':{

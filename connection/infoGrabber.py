@@ -20,7 +20,7 @@ class infoGrabber:
 
 
 
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armour_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}, time_fail = 0, player_fail = 0):
+    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armor_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}, time_fail = 0, player_fail = 0):
 
         #define varables
         self.driver = None
@@ -30,7 +30,7 @@ class infoGrabber:
         self.DEFAULT_AMMO = {'pass':True}
         self.FAILED_HEALING = heal_fail
         self.DEFAULT_HEALING = {'pass':True}
-        self.FAILED_ARMOUR = armour_fail
+        self.FAILED_ARMOR = armor_fail
         self.FAILED_RED_TIME = time_fail
         self.FAILED_PLAYER_NUM = player_fail
         self.FAILED_ZOOM = zoom_fail
@@ -149,7 +149,7 @@ class infoGrabber:
 
         return medicDic
 
-    def __get_armour(self):
+    def __get_armor(self):
         equipedArmor = {'pass':True}
         equipment = self.driver.find_elements_by_class_name('ui-armor-counter')
         for equiped in equipment:
@@ -257,11 +257,11 @@ class infoGrabber:
         except:
             return self.FAILED_HEALING
 
-    def get_armour(self):
+    def get_armor(self):
         try:
-            return self.__get_armour()
+            return self.__get_armor()
         except:
-            return self.FAILED_ARMOUR
+            return self.FAILED_ARMOR
 
     def get_red_time(self):
         try:
@@ -297,7 +297,7 @@ if __name__ == '__main__':
     a.get_image().show()
     time.sleep(10)
     while run:
-        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armour(),'players':a.get_players_left(),'zoom':a.get_zoom()}
+        ndata = {'health':a.get_health(),"tool":a.get_tools(),'ammo':a.get_ammo(),'healing':a.get_healing(),'armor':a.get_armor(),'players':a.get_players_left(),'zoom':a.get_zoom()}
         if ndata != data:
             data = ndata
             print(data)

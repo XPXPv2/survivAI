@@ -1,11 +1,19 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys as keys
+from selenium.webdriver import ActionChains
 
 class interacter:
 
     def __init__(self):
         pass
         self.driver = None
+
+    def rightClick(self,element):
+
+        actionChains = ActionChains(self.driver)
+
+        actionChains.context_click(element).perform()
+
 
     def loadPage(self):
         #opens webpage
@@ -50,6 +58,26 @@ class interacter:
 
         return 0
 
+    def __dropTool(self,slot):
+
+        id = "ui-weapon-id-" + str(slot)
+
+        element = self.driver.find_element_by_id(id)
+
+        self.rightClick(element)
+
+        return 0
+
+    def __dropLoot(self,item):
+
+        id = "ui-loot-" + str(item)
+
+        element = self.driver.find_element_by_id(id)
+
+        self.rightClick(element)
+
+        return 0
+
     def useHealing(self,item):
         try:
             return self.__useHealing(item)
@@ -59,5 +87,17 @@ class interacter:
     def setTool(self,slot):
         try:
             return self.__setTool(slot)
+        except:
+            return -1
+
+    def dropTool(self,slot):
+        try:
+            return self.__dropTool()
+        except:
+            return -1
+
+    def dropLoot(self,slot):
+        try:
+            return self.__dropLoot(slot)
         except:
             return -1
