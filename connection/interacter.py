@@ -78,6 +78,25 @@ class interacter:
 
         return 0
 
+"""
+#Removed due to some not being posable
+    def __dropArmor(self,Atype):
+
+        id = "ui-armor-" + str(Atype)
+        print("par")
+        element = self.driver.find_element_by_id(id)
+        print("choi")
+        subele = element.find_element_by_class_name('ui-armor-counter-inner')
+        #print("#######")
+        print("parent")
+        print(id)
+        self.rightClick(element)
+        print("sub")
+        self.rightClick(element)
+
+        return 0
+"""
+
     def useHealing(self,item):
         try:
             return self.__useHealing(item)
@@ -101,3 +120,12 @@ class interacter:
             return self.__dropLoot(slot)
         except:
             return -1
+
+"""
+#Removed due to some not being posable
+    def dropArmor(self,Atype):
+        #try:
+        return self.__dropArmor(Atype)
+        #except:
+            #return -1
+"""
