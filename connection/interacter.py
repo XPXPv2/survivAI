@@ -78,8 +78,8 @@ class interacter:
 
         return 0
 
-"""
-#Removed due to some not being posable
+    """
+    #Removed due to some not being posable
     def __dropArmor(self,Atype):
 
         id = "ui-armor-" + str(Atype)
@@ -95,7 +95,17 @@ class interacter:
         self.rightClick(element)
 
         return 0
-"""
+    """
+    def selectScope(self,level):
+
+        id = "ui-scope-" + str(level)
+
+        element = self.driver.find_element_by_id(id)
+
+        element.click()
+
+        return 0
+
 
     def useHealing(self,item):
         try:

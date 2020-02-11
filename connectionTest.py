@@ -18,6 +18,7 @@ a.updateInfo()
 print(a.info)
 print(a.info['stagnant']['armor'].keys())
 while(True):
+
     """
     #auto healing
     for item in a.info['stagnant']['healing'].keys():
