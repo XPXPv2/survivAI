@@ -24,5 +24,4 @@ while(True):
     for item in a.info['stagnant']['healing'].keys():
         a.do.useHealing(item)
     """
-
     pass

@@ -96,7 +96,20 @@ class interacter:
 
         return 0
     """
-    def selectScope(self,level):
+    def __dropScope(self,level):
+
+        if(level == "1xscope"):
+            return -1
+
+        id = "ui-scope-" + str(level)
+
+        element = self.driver.find_element_by_id(id)
+
+        self.rightClick(element)
+
+        return 0
+
+    def __selectScope(self,level):
 
         id = "ui-scope-" + str(level)
 
@@ -128,6 +141,18 @@ class interacter:
     def dropLoot(self,slot):
         try:
             return self.__dropLoot(slot)
+        except:
+            return -1
+
+    def dropScope(self,level):
+        try:
+            return self.__dropScope(level)
+        except:
+            return -1
+
+    def selectScope(self,level):
+        try:
+            return self.__selectScope(level)
         except:
             return -1
 
