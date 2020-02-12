@@ -20,11 +20,12 @@ class infoGrabber:
 
 
 
-    def __init__(self,health_fail = 0.0 , tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armor_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}, time_fail = 0, player_fail = 0):
+    def __init__(self, health_fail = 0.0, adrenaline_fail = 0.0, tool_fail = ['','','',''], ammo_fail = {'pass':False}, heal_fail = {'pass':False}, armor_fail = {'pass':False}, zoom_fail = {'active':'1xscope','avalable':['1xscope']}, time_fail = 0, player_fail = 0):
 
         #define varables
         self.driver = None
         self.FAILED_HEALTH = health_fail
+        self.FAILED_ADRENALINE = adrenaline_fail
         self.FAILED_TOOLS = tool_fail
         self.FAILED_AMMO = ammo_fail
         self.DEFAULT_AMMO = {'pass':True}
@@ -233,6 +234,27 @@ class infoGrabber:
 
         return intVal
 
+    def __get_adrenaline(self):
+
+        TOTAL = 400
+
+        value = 0.0
+        base = "ui-boost-counter-"
+
+        for num in range(4):
+
+            parent = self.driver.find_element_by_id(base + str(num))
+
+            width = float(parent.value_of_css_property("width")[:-2])
+
+            element = parent.find_element_by_class_name("ui-bar-inner")
+
+            per = float(element.get_property('attributes')['1']['value'].split(":")[1][:-2])
+            value += (per * (width/TOTAL))
+
+        return value
+
+
     def get_health(self):
         try:
             return self.__get_health()
@@ -284,6 +306,12 @@ class infoGrabber:
     def get_image(self):
         #TODO add later webgl image grabing
         return self.__get_image_canvas()
+
+    def get_adrenaline(self):
+        try:
+            return self.__get_adrenaline()
+        except:
+            return self.FAILED_ADRENALINE
 
 if __name__ == '__main__':
     a = infoGrabber()

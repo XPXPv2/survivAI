@@ -74,7 +74,9 @@ class connectionManager:
             'healing':self.grab.get_healing(),
             'armor':self.grab.get_armor(),
             'playersAlive':self.grab.get_players_left(),
-            'zoom':self.grab.get_zoom()},
+            'zoom':self.grab.get_zoom(),
+            'adrenaline':self.grab.get_adrenaline()
+            },
         'nonstagnant':{
             'redZone':self.grab.get_red_time(),
             'image':self.grab.get_image()
