@@ -4,7 +4,6 @@ import time
 import PIL.Image, io, base64
 
 
-#TODO add adrenaline
 class infoGrabber:
 
 

@@ -119,6 +119,23 @@ class interacter:
 
         return 0
 
+    def __moveMouse(self,x,y):
+        path = "/html"
+
+        element = self.driver.find_element_by_xpath(path)
+
+        actionChain = ActionChains(self.driver)
+
+        actionChain.move_to_element_with_offset(element,x,y).perform()
+
+        return 0
+
+    def __clickMouse(self):
+
+        actionChain = ActionChains(self.driver)
+
+        actionChain.click().perform()
+
 
     def useHealing(self,item):
         try:
@@ -153,6 +170,18 @@ class interacter:
     def selectScope(self,level):
         try:
             return self.__selectScope(level)
+        except:
+            return -1
+
+    def moveMouse(self,x,y):
+        try:
+            return self.__moveMouse(x,y)
+        except:
+            return -1
+
+    def clickMouse(self):
+        try:
+            return self.__clickMouse()
         except:
             return -1
 
